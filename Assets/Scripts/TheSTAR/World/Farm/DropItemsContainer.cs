@@ -63,7 +63,12 @@ namespace TheSTAR.World.Farm
                 LeanTween.value(0, 1, _dropWaitAfterCreateTime).setOnComplete(() =>
                 {
                     if (receiver != null) FlyToReceiver(receiver);
-                    else item.OnDropToWorld(() => FlyToReceiver(_playerDropReceiver));
+                    else item.OnDropToWorld(() =>
+                    {
+                        if (_transactions.IsItemMaxCount(itemType)) return;
+                        FlyToReceiver(_playerDropReceiver);
+                        item.OnTakeFromWorld();
+                    });
                 });
             });
 

@@ -11,7 +11,6 @@ namespace TheSTAR.World
         public ItemType ItemType => itemType;
 
         private bool inWorld = false;
-        public bool InWorld => inWorld;
         
         private Action _interactAction;
 
@@ -28,15 +27,17 @@ namespace TheSTAR.World
             col.enabled = true;
         }
 
+        public void OnTakeFromWorld()
+        {
+            _interactAction = null;
+            inWorld = false;
+        }
+
         public bool CanInteract => inWorld;
         public CiCondition Condition => CiCondition.None;
         public void Interact(Player.Player p)
         {
-            Debug.Log("Interact");
-            
             _interactAction?.Invoke();
-            _interactAction = null;
-            inWorld = false;
         }
 
         public void StopInteract(Player.Player p)

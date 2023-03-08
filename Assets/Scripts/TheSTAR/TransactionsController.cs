@@ -57,6 +57,16 @@ namespace TheSTAR
             Reaction(itemType, result);
         }
 
+        public bool IsItemMaxCount(ItemType itemType)
+        {
+            var itemMaxCount = _farm.ItemsConfig.Items[(int)itemType].MaxValue;
+
+            if (itemMaxCount == null) return false;
+            
+            var currentValue = _data.gameData.GetItemCount(itemType);
+            return currentValue >= itemMaxCount;
+        }
+
         public void ReduceItem(ItemType itemType, int count = 1, bool autoSave = false, Action completeAction = null, Action failAction = null)
         {
             if (_data.gameData.GetItemCount(itemType) >= count)
