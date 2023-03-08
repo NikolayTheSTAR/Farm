@@ -1867,9 +1867,10 @@ GameObject:
   m_Component:
   - component: {fileID: 6668375774055498433}
   - component: {fileID: -7297246828576578938}
+  - component: {fileID: 7823915177234766962}
   m_Layer: 0
   m_Name: Wheat
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1903,6 +1904,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemType: 0
+  col: {fileID: 7823915177234766962}
+--- !u!135 &7823915177234766962
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6810681022150343655}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.3
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6921123232635136339
 GameObject:
   m_ObjectHideFlags: 0
@@ -2246,7 +2261,6 @@ GameObject:
   - component: {fileID: 4376495313060276511}
   - component: {fileID: 2557998439719980524}
   - component: {fileID: 8113939926728939522}
-  - component: {fileID: 7537811203981206408}
   m_Layer: 0
   m_Name: Block
   m_TagString: Untagged
@@ -2323,19 +2337,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &7537811203981206408
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7435051010861512683}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7561218300683335054
 GameObject:
   m_ObjectHideFlags: 0

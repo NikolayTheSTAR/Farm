@@ -20,5 +20,5 @@ MonoBehaviour:
     resultToItemCount: 15
     craftTime: 0
   dropToFactoryPeriod: 0.1
-  randomOffsetRange: 0.4
+  randomOffsetRange: 0.2
   dropWaitAfterCreateTime: 0.1

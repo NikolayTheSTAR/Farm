@@ -1,5 +1,4 @@
 using System;
-using Mining;
 using TheSTAR.Data;
 using TheSTAR.GUI;
 using TheSTAR.GUI.FlyUI;

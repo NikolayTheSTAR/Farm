@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Source
   - Factory
+  - Item
   layers:
   - Default
   - TransparentFX

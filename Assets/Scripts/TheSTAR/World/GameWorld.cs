@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Configs;
-using Mining;
 using TheSTAR;
 using TheSTAR.GUI.FlyUI;
 using TheSTAR.World.Farm;
@@ -41,7 +40,7 @@ namespace World
                 if (source == null) continue;
                 sourceType = source.SourceType;
                 sourceData = _farmController.SourcesConfig.SourceDatas[(int)sourceType];
-                source.Init(sourceData, dropItemsContainer.DropFromSenderToPlayer, (s) =>
+                source.Init(sourceData, dropItemsContainer.DropFromSenderToWorld, (s) =>
                 {
                     CurrentPlayer.StopFarm(s);
                     _farmController.StartSourceRecovery(s);

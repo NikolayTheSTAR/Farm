@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Mining;
 using TheSTAR.GUI.Screens;
+using TheSTAR.World;
+using TheSTAR.World.Farm;
 using UnityEngine;
 using UnityEngine.Serialization;
 using World;

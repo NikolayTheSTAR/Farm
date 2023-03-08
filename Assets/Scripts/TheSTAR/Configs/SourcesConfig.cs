@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using Sirenix.OdinInspector;
+using TheSTAR.World;
 using UnityEngine;
 using World;
 

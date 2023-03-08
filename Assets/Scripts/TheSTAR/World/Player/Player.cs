@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Configs;
-using Mining;
 using TheSTAR.Input;
 using TheSTAR.World.Farm;
 using Unity.Mathematics;
@@ -123,7 +122,7 @@ namespace TheSTAR.World.Player
         
             ci.OnEnter();
         
-            _currentCIs.Add(ci);
+            if (!other.CompareTag("Item")) _currentCIs.Add(ci);
         
             if (!ci.CanInteract) return;
             if (ci.Condition == CiCondition.None) ci.Interact(this);
@@ -163,7 +162,7 @@ namespace TheSTAR.World.Player
                 if (ci.Condition != CiCondition.PlayerIsStopped) continue;
                 ci.Interact(this);
 
-                return;
+                break;
             }
             
             BreakMoveAnim();

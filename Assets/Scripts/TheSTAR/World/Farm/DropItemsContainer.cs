@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
-using TheSTAR;
-using TheSTAR.World.Farm;
 using Unity.Mathematics;
 using UnityEngine;
 using World;
 using Random = UnityEngine.Random;
 
-namespace Mining
+namespace TheSTAR.World.Farm
 { 
     public class DropItemsContainer : MonoBehaviour
     {
@@ -19,9 +17,9 @@ namespace Mining
 
         private float _dropWaitAfterCreateTime = 0.2f;
         private const float FlyToReceiverTime = 0.5f;
-        private readonly Vector3 _standardDropOffset = new Vector3(0, 3, -2);
+        private readonly Vector3 _standardDropOffset = new Vector3(0, 0.5f, 0);
         
-        private float _randomOffsetRange = 0.4f;
+        private float _randomOffsetRange = 0.2f;
 
         private Action _onFailDropToFactoryAction;
 
@@ -43,30 +41,37 @@ namespace Mining
             _onFailDropToFactoryAction = onFailDropToFactoryAction;
         }
         
-        public void DropFromSenderToPlayer(IDropSender sender, ItemType dropItemType)
+        public void DropFromSenderToWorld(IDropSender sender, ItemType dropItemType)
         {
             var offset = CreateItemPosOffset;
-            DropItemTo(dropItemType, sender.startSendPos.position + offset, _playerDropReceiver, () =>
+            DropItemTo(dropItemType, sender.startSendPos.position + offset, null, () =>
             {   
                 _transactions.AddItem(dropItemType);
                 sender.OnCompleteDrop();
             });
         }
-        
+
         private void DropItemTo(ItemType itemType, Vector3 startPos, IDropReceiver receiver, Action completeAction = null)
         {
-            receiver.OnStartReceiving();
-            
+            receiver?.OnStartReceiving();
+
             var item = GetItemFromPool(itemType, startPos);
             item.transform.localScale = Vector3.zero;
-            
-            LeanTween.scale(item.gameObject, Vector3.one, 0.2f).setOnComplete(() => { LeanTween.value(0, 1, _dropWaitAfterCreateTime).setOnComplete(FlyToReceiver);});
 
-            void FlyToReceiver()
+            LeanTween.scale(item.gameObject, Vector3.one, 0.2f).setOnComplete(() =>
+            {
+                LeanTween.value(0, 1, _dropWaitAfterCreateTime).setOnComplete(() =>
+                {
+                    if (receiver != null) FlyToReceiver(receiver);
+                    else item.OnDropToWorld(() => FlyToReceiver(_playerDropReceiver));
+                });
+            });
+
+            void FlyToReceiver(IDropReceiver r)
             {
                 LeanTween.value(0, 1, FlyToReceiverTime).setOnUpdate((value) =>
                 {
-                    var way = receiver.transform.position - startPos;
+                    var way = r.transform.position - startPos;
                     item.transform.position = startPos + value * (way);
                     
                     // physic imitation
@@ -78,7 +83,7 @@ namespace Mining
                 {
                     item.gameObject.SetActive(false);
                     completeAction?.Invoke();
-                    receiver.OnCompleteReceiving();
+                    r.OnCompleteReceiving();
                 });
             }
         }
@@ -96,28 +101,36 @@ namespace Mining
         
         private ResourceItem GetItemFromPool(ItemType itemType, Vector3 startPos, bool autoActivate = true)
         {
-            if (_itemPools.ContainsKey(itemType))
-            {
-                var pool = _itemPools[itemType];
-                var itemInPool = pool?.Find(info => !info.gameObject.activeSelf);
-                if (itemInPool != null)
-                {
-                    if (autoActivate) itemInPool.gameObject.SetActive(true);
-                    itemInPool.transform.position = startPos;
-                    return itemInPool;
-                }
-                
-                var newItem = CreateItem();
-                pool.Add(newItem);
-                return newItem;
-            }
-            else
-            {
-                var newItem = CreateItem();
-                _itemPools.Add(itemType, new List<ResourceItem>(){newItem});
-                return newItem;
-            }
+            var result = Get();
+            result.OnActivate();
 
+            return result;
+            
+            ResourceItem Get()
+            {
+                if (_itemPools.ContainsKey(itemType))
+                {
+                    var pool = _itemPools[itemType];
+                    var itemInPool = pool?.Find(info => !info.gameObject.activeSelf);
+                    if (itemInPool != null)
+                    {
+                        if (autoActivate) itemInPool.gameObject.SetActive(true);
+                        itemInPool.transform.position = startPos;
+                        return itemInPool;
+                    }
+                
+                    var newItem = CreateItem();
+                    pool.Add(newItem);
+                    return newItem;
+                }
+                else
+                {
+                    var newItem = CreateItem();
+                    _itemPools.Add(itemType, new List<ResourceItem>(){newItem});
+                    return newItem;
+                }
+            }
+            
             ResourceItem CreateItem() => Instantiate(_farmController.GetResourceItemPrefab(itemType), startPos, quaternion.identity, transform);
         }
     }
