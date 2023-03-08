@@ -165,6 +165,8 @@ public class Player : GameWorldObject, ICameraFocusable, IJoystickControlled, ID
 
     public void StartMining(ResourceSource source)
     {
+        if (_isMining) return;
+        
         BreakAnim();
         _currentSource = source;
         var miningData = source.SourceData.MiningData;
