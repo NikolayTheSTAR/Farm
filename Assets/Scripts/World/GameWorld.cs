@@ -32,6 +32,7 @@ namespace World
             SourceData sourceData;
             foreach (var source in sources)
             {
+                if (source == null) continue;
                 sourceType = source.SourceType;
                 sourceData = _miningController.SourcesConfig.SourceDatas[(int)sourceType];
                 source.Init(sourceData, dropItemsContainer.DropFromSenderToPlayer, (s) =>
