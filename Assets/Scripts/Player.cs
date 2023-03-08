@@ -67,20 +67,27 @@ public class Player : GameWorldObject, ICameraFocusable, IJoystickControlled, ID
     {
         Vector3 finalMoveDirection;
 
-        if (input.x != 0 || input.y != 0)
+        //Debug.Log(input);
+        
+        if (input == Vector2.zero)
         {
-            var tempMoveDirection = new Vector3(input.x, 0, input.y);
-            finalMoveDirection = transform.position + tempMoveDirection;
-            
-            if (!_isMoving) OnStartMove();
-
-            OnMove();
+            finalMoveDirection = transform.position;
+            if (_isMoving) OnStopMove();
         }
         else
         {
-            finalMoveDirection = transform.position;
+            var tempMoveDirection = new Vector3(input.x, 0, input.y);
+            finalMoveDirection = transform.position + new Vector3(tempMoveDirection.x, 0, tempMoveDirection.z);
+
+            if (!_isMoving) OnStartMove();
+
+            OnMove();
+
+            // rotate
             
-            if (_isMoving) OnStopMove();
+            var lookRotation = Quaternion.LookRotation(tempMoveDirection);
+            var euler = lookRotation.eulerAngles;
+            visualTran.rotation = Quaternion.Euler(0, euler.y, 0);
         }
 
         meshAgent.SetDestination(finalMoveDirection);
