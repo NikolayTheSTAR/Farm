@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Configs;
 using Mining;
+using TheSTAR.World.Player;
 using UnityEngine;
 using Tutorial;
 

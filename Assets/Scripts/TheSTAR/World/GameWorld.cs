@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Configs;
-using Farm;
 using Mining;
+using TheSTAR;
+using TheSTAR.World.Farm;
+using TheSTAR.World.Player;
 using UnityEngine;
 
 namespace World

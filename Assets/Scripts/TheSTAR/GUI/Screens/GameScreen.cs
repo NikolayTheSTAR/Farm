@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Farm;
 using Mining;
 using TheSTAR.Input;
 using TheSTAR.Utility;
+using TheSTAR.World.Farm;
 using UnityEngine;
 using World;
 
@@ -35,7 +35,7 @@ namespace TheSTAR.GUI.Screens
             for (var i = 0; i < itemTypes.Length; i++)
             {
                 counter = Instantiate(counterPrefab, countersParent);
-                counter.Init(farm.ItemsConfig.Items[i].IconSprite, itemTypes[i]);
+                counter.Init(farm.ItemsConfig.Items[i].IconSprite, itemTypes[i], farm.ItemsConfig.Items[i].MaxValue);
                 counters.Add(counter);
             }
         }

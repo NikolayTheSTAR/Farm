@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using Configs;
+using TheSTAR.Configs;
 using UnityEngine;
 using World;
 
-namespace Farm
+namespace TheSTAR.World.Farm
 {
     public class FarmController : MonoBehaviour
     {

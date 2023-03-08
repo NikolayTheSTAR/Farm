@@ -1,11 +1,12 @@
 using System;
-using Farm;
 using Mining;
 using Sirenix.OdinInspector;
+using TheSTAR;
 using TheSTAR.Data;
 using TheSTAR.GUI;
 using TheSTAR.GUI.Screens;
 using TheSTAR.Input;
+using TheSTAR.World.Farm;
 using Tutorial;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -51,7 +52,7 @@ public class GameController : MonoBehaviour
         gameScreen.Init(farm);
         
         input.Init(gameScreen.JoystickContainer, world.CurrentPlayer);
-        transactions.Init(trs, data);
+        transactions.Init(data, farm, trs);
         drop.Init(transactions, farm, world.CurrentPlayer, world.CurrentPlayer.StopCraft);
     }
 }

@@ -1,8 +1,9 @@
 using System;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using World;
 
-namespace Configs
+namespace TheSTAR.Configs
 {
     [CreateAssetMenu(menuName = "Data/Items", fileName = "ItemsConfig")]
     public class ItemsConfig : ScriptableObject
@@ -19,8 +20,14 @@ namespace Configs
         [SerializeField] private float physicalImpulse = 2;
 
         [SerializeField] private Sprite iconSprite;
+        [SerializeField] private bool limit;
+        
+        [ShowIf("limit")]
+        [SerializeField] private int maxValue;
 
         public float PhysicalImpulse => physicalImpulse;
         public Sprite IconSprite => iconSprite;
+        public bool Limit => limit;
+        public int? MaxValue => limit ? maxValue : null;
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using Sirenix.OdinInspector;
 using TheSTAR.Data;
+using TheSTAR.World.Player;
 using UnityEngine;
 using World;
 

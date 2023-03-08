@@ -16,6 +16,10 @@ MonoBehaviour:
   - itemType: 0
     physicalImpulse: 5
     iconSprite: {fileID: 21300000, guid: 9a0586920560c4980956bd062f5092b1, type: 3}
+    limit: 1
+    maxValue: 40
   - itemType: 1
     physicalImpulse: 5
     iconSprite: {fileID: 21300000, guid: 49a9121dcc9cf46ebbf5947349a0ab29, type: 3}
+    limit: 0
+    maxValue: 0
