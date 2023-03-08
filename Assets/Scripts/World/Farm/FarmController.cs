@@ -4,9 +4,9 @@ using Configs;
 using UnityEngine;
 using World;
 
-namespace Mining
+namespace Farm
 {
-    public class MiningController : MonoBehaviour
+    public class FarmController : MonoBehaviour
     {
         private const string SourcesLoadPath = "Configs/SourcesConfig";
         private SourcesConfig _sourceConfig;
@@ -53,7 +53,7 @@ namespace Mining
             return loadedItem;
         }
 
-        public void StartSourceRecovery(ResourceSource source)
+        public void StartSourceRecovery(FarmSource source)
         {
             var recoveryDateTime = 
                 DateTime.Now + 
@@ -81,22 +81,38 @@ namespace Mining
 
         private void CheckRecovery()
         {
-            var testRecoveryData = _recoveryDatas[0];
+            bool breakCheck = false;
 
-            if (DateTime.Now < testRecoveryData.recoveryTime) return;
+            while (!breakCheck)
+            {
+                if (_recoveryDatas.Count == 0)
+                {
+                    breakCheck = true;
+                    continue;
+                }
+                
+                var testRecoveryData = _recoveryDatas[0];
+
+                if (DateTime.Now < testRecoveryData.recoveryTime)
+                {
+                    breakCheck = true;
+                    continue;
+                }
             
-            testRecoveryData.source.Recovery();
-            _recoveryDatas.Remove(testRecoveryData);
-            _isWaitForRecovery = false;
+                testRecoveryData.source.Recovery();
+                _recoveryDatas.Remove(testRecoveryData);
+            }
+            
+            _isWaitForRecovery = _recoveryDatas.Count > 0;
         }
 
         [Serializable]
         private class RecoveryData
         {
-            public ResourceSource source { get; private set; }
+            public FarmSource source { get; private set; }
             public DateTime recoveryTime { get; private set; }
 
-            public RecoveryData(ResourceSource source, DateTime time)
+            public RecoveryData(FarmSource source, DateTime time)
             {
                 this.source = source;
                 this.recoveryTime = time;

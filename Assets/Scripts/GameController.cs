@@ -1,4 +1,5 @@
 using System;
+using Farm;
 using Mining;
 using Sirenix.OdinInspector;
 using TheSTAR.Data;
@@ -7,6 +8,7 @@ using TheSTAR.GUI.Screens;
 using TheSTAR.Input;
 using Tutorial;
 using UnityEngine;
+using UnityEngine.Serialization;
 using World;
 
 public class GameController : MonoBehaviour
@@ -15,7 +17,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private CameraController cameraController;
     [SerializeField] private InputController input;
     [SerializeField] private DropItemsContainer drop;
-    [SerializeField] private MiningController mining;
+    [FormerlySerializedAs("mining")] [SerializeField] private FarmController farm;
     [SerializeField] private DataController data;
     [SerializeField] private TransactionsController transactions;
     [SerializeField] private GuiController gui;
@@ -40,16 +42,16 @@ public class GameController : MonoBehaviour
 
     private void Init()
     {
-        mining.Init();
-        world.Init(drop, mining, transactions);
+        farm.Init();
+        world.Init(drop, farm, transactions);
         cameraController.FocusTo(world.CurrentPlayer);
         
         gui.Init(out var trs);
         var gameScreen = gui.FindScreen<GameScreen>();
-        gameScreen.Init(mining);
+        gameScreen.Init(farm);
         
         input.Init(gameScreen.JoystickContainer, world.CurrentPlayer);
         transactions.Init(trs, data);
-        drop.Init(transactions, mining, world.CurrentPlayer, world.CurrentPlayer.StopCraft);
+        drop.Init(transactions, farm, world.CurrentPlayer, world.CurrentPlayer.StopCraft);
     }
 }

@@ -3145,7 +3145,7 @@ GameObject:
   - component: {fileID: 1002400546}
   - component: {fileID: 1002400547}
   m_Layer: 0
-  m_Name: Mining
+  m_Name: Farm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3309,7 +3309,7 @@ MonoBehaviour:
   cameraController: {fileID: 1345028839}
   input: {fileID: 1375490662}
   drop: {fileID: 1928673915}
-  mining: {fileID: 1002400547}
+  farm: {fileID: 1002400547}
   data: {fileID: 126127212}
   transactions: {fileID: 1186933971}
   gui: {fileID: 179512228}

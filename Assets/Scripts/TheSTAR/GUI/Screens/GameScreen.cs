@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Farm;
 using Mining;
 using TheSTAR.Input;
 using TheSTAR.Utility;
@@ -25,7 +26,7 @@ namespace TheSTAR.GUI.Screens
             counter.SetValue(finalValue);   
         }
 
-        public void Init(MiningController mining)
+        public void Init(FarmController farm)
         {
             counters = new List<ItemCounter>();
             var itemTypes = EnumUtility.GetValues<ItemType>();
@@ -34,7 +35,7 @@ namespace TheSTAR.GUI.Screens
             for (var i = 0; i < itemTypes.Length; i++)
             {
                 counter = Instantiate(counterPrefab, countersParent);
-                counter.Init(mining.ItemsConfig.Items[i].IconSprite, itemTypes[i]);
+                counter.Init(farm.ItemsConfig.Items[i].IconSprite, itemTypes[i]);
                 counters.Add(counter);
             }
         }

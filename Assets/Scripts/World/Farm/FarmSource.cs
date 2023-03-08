@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 namespace World
 {
     [Serializable]
-    public class ResourceSource : GameWorldCiObject, IDropSender
+    public class FarmSource : GameWorldCiObject, IDropSender
     {
         [SerializeField] private SourceType sourceType;
         [SerializeField] private GameObject prolificVisual;
@@ -15,7 +15,7 @@ namespace World
 
         private int _animLTID = -1;
         private Action<IDropSender, ItemType> _dropItemAction;
-        private Action<ResourceSource> _onEmptying;
+        private Action<FarmSource> _onEmptying;
         private Action _onRecovery;
         private int _health = 1;
         private SourceData _sourceData;
@@ -29,7 +29,7 @@ namespace World
         public SourceType SourceType => sourceType;
         public SourceData SourceData => _sourceData;
 
-        public void Init(SourceData sourceData, Action<IDropSender, ItemType> dropItemAction, Action<ResourceSource> onEmptying, Action onRecovery)
+        public void Init(SourceData sourceData, Action<IDropSender, ItemType> dropItemAction, Action<FarmSource> onEmptying, Action onRecovery)
         {
             _sourceData = sourceData;
             _dropItemAction = dropItemAction;

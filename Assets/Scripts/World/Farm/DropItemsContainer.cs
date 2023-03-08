@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Farm;
 using Unity.Mathematics;
 using UnityEngine;
 using World;
@@ -10,7 +11,7 @@ namespace Mining
     public class DropItemsContainer : MonoBehaviour
     {
         private IDropReceiver _playerDropReceiver;
-        private MiningController _miningController;
+        private FarmController _farmController;
         private TransactionsController _transactions;
         
         private Dictionary<ItemType, List<ResourceItem>> _itemPools;
@@ -29,12 +30,12 @@ namespace Mining
                Random.Range(-_randomOffsetRange, _randomOffsetRange),
                Random.Range(-_randomOffsetRange, _randomOffsetRange));
 
-        public void Init(TransactionsController transactions, MiningController miningController, IDropReceiver playerDropReceiver, Action onFailDropToFactoryAction)
+        public void Init(TransactionsController transactions, FarmController farmController, IDropReceiver playerDropReceiver, Action onFailDropToFactoryAction)
         {
             _transactions = transactions;
             _playerDropReceiver = playerDropReceiver;
             _itemPools = new Dictionary<ItemType, List<ResourceItem>>();
-            _miningController = miningController;
+            _farmController = farmController;
 
             _randomOffsetRange = transactions.FactoriesConfig.RandomOffsetRange;
             _dropWaitAfterCreateTime = transactions.FactoriesConfig.DropWaitAfterCreateTime;
@@ -68,7 +69,7 @@ namespace Mining
                     item.transform.position = startPos + value * (way);
                     
                     // physic imitation
-                    var impulseForce = _miningController.ItemsConfig.Items[(int)itemType].PhysicalImpulse;
+                    var impulseForce = _farmController.ItemsConfig.Items[(int)itemType].PhysicalImpulse;
                     var dopValueY = Math.Abs((value * value - value) * impulseForce);
                     item.transform.position += new Vector3(0, dopValueY, 0);
 
@@ -116,7 +117,7 @@ namespace Mining
                 return newItem;
             }
 
-            ResourceItem CreateItem() => Instantiate(_miningController.GetResourceItemPrefab(itemType), startPos, quaternion.identity, transform);
+            ResourceItem CreateItem() => Instantiate(_farmController.GetResourceItemPrefab(itemType), startPos, quaternion.identity, transform);
         }
     }
 

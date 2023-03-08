@@ -99,11 +99,11 @@ namespace Tutorial
         [SerializeField] private TutorialShowCondition condition;
 
         [ShowIf("@condition == TutorialShowCondition.ByFarm")] [SerializeField]
-        private ResourceSource farmSource;
+        private FarmSource farmSource;
         
         public GameWorldCiObject GoalObject => goalObject;
         public TutorialShowCondition Condition => condition;
-        public ResourceSource FarmSource => farmSource;
+        public FarmSource FarmSource => farmSource;
         public string ID => id;
     }
 

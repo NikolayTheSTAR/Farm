@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Configs;
+using Farm;
 using Mining;
 using UnityEngine;
 
@@ -9,19 +10,19 @@ namespace World
     public class GameWorld : MonoBehaviour
     {
         [SerializeField] private Transform playerSpawnPoint;
-        [SerializeField] private ResourceSource[] sources = new ResourceSource[0];
+        [SerializeField] private FarmSource[] sources = new FarmSource[0];
         [SerializeField] private Factory[] factories = new Factory[0];
         [SerializeField] private Player playerPrefab;
     
         public Player CurrentPlayer { get; private set; }
 
-        private MiningController _miningController;
+        private FarmController _farmController;
         private DropItemsContainer _dropItemsContainer;
         private TransactionsController _transactions;
 
-        public void Init(DropItemsContainer dropItemsContainer, MiningController miningController, TransactionsController transactions)
+        public void Init(DropItemsContainer dropItemsContainer, FarmController farmController, TransactionsController transactions)
         {
-            _miningController = miningController;
+            _farmController = farmController;
             _dropItemsContainer = dropItemsContainer;
             _transactions = transactions;
             
@@ -34,11 +35,11 @@ namespace World
             {
                 if (source == null) continue;
                 sourceType = source.SourceType;
-                sourceData = _miningController.SourcesConfig.SourceDatas[(int)sourceType];
+                sourceData = _farmController.SourcesConfig.SourceDatas[(int)sourceType];
                 source.Init(sourceData, dropItemsContainer.DropFromSenderToPlayer, (s) =>
                 {
                     CurrentPlayer.StopMining(s);
-                    _miningController.StartSourceRecovery(s);
+                    _farmController.StartSourceRecovery(s);
                 }, () => CurrentPlayer.RetryInteract());
             }
 
@@ -64,7 +65,7 @@ namespace World
         private void RegisterSourcesAndFactories()
         {
             var allSources = GameObject.FindGameObjectsWithTag("Source");
-            var tempSources = allSources.Select(sourceObject => sourceObject.GetComponent<ResourceSource>()).Where(s => s != null).ToArray();
+            var tempSources = allSources.Select(sourceObject => sourceObject.GetComponent<FarmSource>()).Where(s => s != null).ToArray();
             sources = tempSources;
             
             var allFactories = GameObject.FindGameObjectsWithTag("Factory");

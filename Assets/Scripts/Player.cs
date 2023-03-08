@@ -25,7 +25,7 @@ public class Player : GameWorldObject, ICameraFocusable, IJoystickControlled, ID
 
     private TransactionsController _transactions;
     private List<ICollisionInteractable> _currentCIs;
-    private ResourceSource _currentSource;
+    private FarmSource _currentSource;
     private Factory _currentFactory;
     private Coroutine _mineCoroutine;
     private Coroutine _transactionCoroutine;
@@ -163,7 +163,7 @@ public class Player : GameWorldObject, ICameraFocusable, IJoystickControlled, ID
     
     #region Mining
 
-    public void StartMining(ResourceSource source)
+    public void StartMining(FarmSource source)
     {
         if (_isMining) return;
         
@@ -178,7 +178,7 @@ public class Player : GameWorldObject, ICameraFocusable, IJoystickControlled, ID
         _mineCoroutine = StartCoroutine(MiningCor());
     }
         
-    public void StopMining(ResourceSource rs)
+    public void StopMining(FarmSource rs)
     {
         if (_currentSource != rs) return;
             
