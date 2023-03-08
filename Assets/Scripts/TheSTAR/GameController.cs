@@ -50,6 +50,8 @@ public class GameController : MonoBehaviour
         gui.Init(out var trs);
         var gameScreen = gui.FindScreen<GameScreen>();
         gameScreen.Init(farm);
+
+        trs.Add(world.CurrentPlayer);
         
         input.Init(gameScreen.JoystickContainer, world.CurrentPlayer);
         transactions.Init(data, farm, trs);

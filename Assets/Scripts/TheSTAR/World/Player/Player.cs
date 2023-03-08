@@ -4,19 +4,21 @@ using System.Collections.Generic;
 using Configs;
 using Mining;
 using TheSTAR.Input;
+using TheSTAR.World.Farm;
 using UnityEngine;
 using UnityEngine.AI;
 using World;
 
 namespace TheSTAR.World.Player
 {
-    public class Player : GameWorldObject, ICameraFocusable, IJoystickControlled, IDropReceiver
+    public class Player : GameWorldObject, ICameraFocusable, IJoystickControlled, IDropReceiver, ITransactionReactable
     {
         [SerializeField] private NavMeshAgent meshAgent;
         [SerializeField] private EntranceTrigger trigger;
         [SerializeField] private Transform visualTran;
         [SerializeField] private Transform toolArmTran;
         [SerializeField] private GameObject toolObject;
+        [SerializeField] private PlayerBackpack backpack;
 
         private float 
             _mineStrikePeriod = 1,
@@ -28,6 +30,8 @@ namespace TheSTAR.World.Player
             _isTransaction = false;
 
         private TransactionsController _transactions;
+        private FarmController _farm;
+        
         private List<ICollisionInteractable> _currentCIs;
         private FarmSource _currentSource;
         private Factory _currentFactory;
@@ -53,9 +57,11 @@ namespace TheSTAR.World.Player
             }
         }
 
-        public void Init(TransactionsController transactions, Action<Factory> dropToFactoryAction, float dropToFactoryPeriod)
+        public void Init(TransactionsController transactions, FarmController farm, Action<Factory> dropToFactoryAction, float dropToFactoryPeriod)
         {
+            _farm = farm;
             _transactions = transactions;
+            
             trigger.Init(OnEnter, OnExit);
             _dropToFactoryAction = dropToFactoryAction;
             _dropToFactoryPeriod = dropToFactoryPeriod;
@@ -278,5 +284,20 @@ namespace TheSTAR.World.Player
         public void OnStartReceiving() {}
 
         public void OnCompleteReceiving() {}
+
+        public void OnTransactionReact(ItemType itemType, int finalValue)
+        {
+            if (itemType != ItemType.Wheat) return;
+
+            var maxValue = _farm.ItemsConfig.Items[(int)itemType].MaxValue;
+            var fullness = (float)finalValue / (float)(maxValue ?? 1);
+            
+            if (fullness == 0) backpack.gameObject.SetActive(false);
+            else
+            {
+                backpack.gameObject.SetActive(true);
+                backpack.SetFullness(fullness);
+            }
+        }
     }
 }

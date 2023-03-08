@@ -8,7 +8,7 @@ namespace TheSTAR.World.Player
         private const float MinFullnessSize = 0.5f;
         private const float MaxFullnessSize = 1;
 
-        public void SetSize(float fullness)
+        public void SetFullness(float fullness)
         {
             fullness = MathUtility.Limit(fullness, 0, 1);
 

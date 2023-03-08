@@ -58,7 +58,7 @@ namespace World
         private void SpawnPlayer()
         {
             CurrentPlayer = Instantiate(playerPrefab, playerSpawnPoint.position, Quaternion.identity, transform);
-            CurrentPlayer.Init(_transactions, _dropItemsContainer.DropToFactory, _transactions.FactoriesConfig.DropToFactoryPeriod);
+            CurrentPlayer.Init(_transactions, _farmController, _dropItemsContainer.DropToFactory, _transactions.FactoriesConfig.DropToFactoryPeriod);
         }
         
         #if UNITY_EDITOR
