@@ -78,10 +78,6 @@ namespace World
 
     public enum FactoryType
     {
-        AppleFactory,
-        LogFactory,
-        WheatFactory,
-        IronFactory,
-        CrystalFactory
+        WheatFactory
     }   
 }
