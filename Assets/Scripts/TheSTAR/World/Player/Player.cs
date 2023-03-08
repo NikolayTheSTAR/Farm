@@ -55,7 +55,7 @@ namespace TheSTAR.World.Player
         private const float DefaultMineStrikeTime = 0.5f;
         private const float StepTime = 0.5f;
         private const float StepAngle = 30;
-        private const float BackpackStepAngle = 5;
+        private const float BackpackStepAngle = 10;
         private const string CharacterConfigPath = "Configs/CharacterConfig";
     
         private CharacterConfig _characterConfig;

@@ -25,8 +25,9 @@ namespace TheSTAR.GUI
         
         public ItemType ItemType => itemType;
         
-        public void Init(Sprite iconSprite, ItemType itemType, int? maxValue = null)
+        public void Init(Sprite iconSprite, ItemType itemType, bool useSmooth, int? maxValue = null)
         {
+            smooth = useSmooth;
             iconImage.sprite = iconSprite;
             this.itemType = itemType;
             this.maxValue = maxValue;
