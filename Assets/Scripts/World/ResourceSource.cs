@@ -112,10 +112,6 @@ namespace World
 
     public enum SourceType
     {
-        AppleTree,
-        IronMine,
-        CrystalMine,
-        WheatField,
-        LogTree
+        WheatField
     }
 }

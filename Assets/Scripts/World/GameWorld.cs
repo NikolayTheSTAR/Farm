@@ -60,12 +60,16 @@ namespace World
         
         #if UNITY_EDITOR
 
-        [ContextMenu("RegisterSources")]
-        private void RegisterSources()
+        [ContextMenu("RegisterSourcesAndFactories")]
+        private void RegisterSourcesAndFactories()
         {
             var allSources = GameObject.FindGameObjectsWithTag("Source");
             var tempSources = allSources.Select(sourceObject => sourceObject.GetComponent<ResourceSource>()).Where(s => s != null).ToArray();
             sources = tempSources;
+            
+            var allFactories = GameObject.FindGameObjectsWithTag("Factory");
+            var tempFactories = allFactories.Select(sourceObject => sourceObject.GetComponent<Factory>()).Where(s => s != null).ToArray();
+            factories = tempFactories;
         }
         
         #endif

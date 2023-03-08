@@ -11,15 +11,7 @@ namespace World
 
     public enum ItemType
     {
-        Apple,
-        Log,
         Wheat,
-        AppleJam,
-        Board,
-        Flour,
-        IronOre,
-        IronBar,
-        Сrystal,
-        Brilliant
+        Coin
     }
 }
