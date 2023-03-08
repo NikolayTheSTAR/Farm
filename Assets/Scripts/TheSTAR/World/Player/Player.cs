@@ -5,6 +5,7 @@ using Configs;
 using Mining;
 using TheSTAR.Input;
 using TheSTAR.World.Farm;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AI;
 using World;
@@ -19,15 +20,17 @@ namespace TheSTAR.World.Player
         [SerializeField] private Transform toolArmTran;
         [SerializeField] private GameObject toolObject;
         [SerializeField] private PlayerBackpack backpack;
+        [SerializeField] private Transform legLeft;
+        [SerializeField] private Transform legRight;
 
         private float 
-            _mineStrikePeriod = 1,
-            _dropToFactoryPeriod = 1;
+        _mineStrikePeriod = 1,
+        _dropToFactoryPeriod = 1;
     
         private bool 
-            _isMoving = false, 
-            _isMining = false, 
-            _isTransaction = false;
+        _isMoving = false, 
+        _isFarming = false, 
+        _isTransaction = false;
 
         private TransactionsController _transactions;
         private FarmController _farm;
@@ -35,15 +38,23 @@ namespace TheSTAR.World.Player
         private List<ICollisionInteractable> _currentCIs;
         private FarmSource _currentSource;
         private Factory _currentFactory;
-        private Coroutine _mineCoroutine;
-        private Coroutine _transactionCoroutine;
-        private int _animLTID = -1;
+
+        private Coroutine
+        _farmCoroutine,
+        _transactionCoroutine,
+        moveCoroutine;
+
+        private int
+        _animFarmLTID = -1,
+        _animStepLTID = -1;
 
         private Action<Factory> _dropToFactoryAction;
     
         public event Action OnMoveEvent;
 
         private const float DefaultMineStrikeTime = 0.5f;
+        private const float StepTime = 0.5f;
+        private const float StepAngle = 30;
         private const string CharacterConfigPath = "Configs/CharacterConfig";
     
         private CharacterConfig _characterConfig;
@@ -131,9 +142,11 @@ namespace TheSTAR.World.Player
 
             foreach (var ci in _currentCIs)
             {
-                if (ci == null || !ci.CanInteract) return;
+                if (ci == null || !ci.CanInteract) break;
                 if (ci.Condition == CiCondition.PlayerIsStopped) ci.StopInteract(this);   
             }
+
+            moveCoroutine = StartCoroutine(MovingCor());
         }
     
         private void OnMove() => OnMoveEvent?.Invoke();
@@ -150,6 +163,9 @@ namespace TheSTAR.World.Player
 
                 return;
             }
+            
+            BreakMoveAnim();
+            if (moveCoroutine != null) StopCoroutine(moveCoroutine);
         }
     
         #endregion
@@ -170,22 +186,59 @@ namespace TheSTAR.World.Player
                 return;
             }
         }
-    
+
+        #region Move
+
+        private IEnumerator MovingCor()
+        {
+            while (_isMoving)
+            {
+                AnimateStep();
+                yield return new WaitForSeconds(StepTime * 2);
+            }
+        }
+
+        private void AnimateStep()
+        {
+            float angle;
+            
+            _animStepLTID = 
+            LeanTween.value(-1, 1, StepTime).setOnUpdate((value) =>
+            {
+                angle = value * StepAngle;
+
+                legLeft.localRotation = Quaternion.Euler(angle, 0, 0);
+                legRight.localRotation = Quaternion.Euler(-angle, 0, 0);
+            }).setOnComplete(() =>
+            {
+                _animStepLTID =
+                LeanTween.value(1, -1, StepTime).setOnUpdate((value) =>
+                {
+                    angle = value * StepAngle;
+
+                    legLeft.localRotation = Quaternion.Euler(angle, 0, 0);
+                    legRight.localRotation = Quaternion.Euler(-angle, 0, 0);
+                }).id;
+            }).id;
+        }
+
+        #endregion
+        
         #region Farm
 
         public void StartFarm(FarmSource source)
         {
-            if (_isMining) return;
+            if (_isFarming) return;
         
-            BreakAnim();
+            BreakFarmAnim();
             _currentSource = source;
             var miningData = source.SourceData.MiningData;
             _mineStrikePeriod = miningData.MiningPeriod;
         
-            _isMining = true;
+            _isFarming = true;
         
-            if (_mineCoroutine != null) StopCoroutine(_mineCoroutine);
-            _mineCoroutine = StartCoroutine(FarmingCor());
+            if (_farmCoroutine != null) StopCoroutine(_farmCoroutine);
+            _farmCoroutine = StartCoroutine(FarmingCor());
         }
         
         public void StopFarm(FarmSource rs)
@@ -193,17 +246,17 @@ namespace TheSTAR.World.Player
             if (_currentSource != rs) return;
             
             _currentSource = null;
-            _isMining = false;
-            BreakAnim();
+            _isFarming = false;
+            BreakFarmAnim();
         
-            if (_mineCoroutine != null) StopCoroutine(_mineCoroutine);
+            if (_farmCoroutine != null) StopCoroutine(_farmCoroutine);
         
             RetryInteract();
         }
 
         private IEnumerator FarmingCor()
         {
-            while (_isMining)
+            while (_isFarming)
             {
                 DoFarmStrike();
                 yield return new WaitForSeconds(_mineStrikePeriod);
@@ -213,21 +266,21 @@ namespace TheSTAR.World.Player
 
         private void DoFarmStrike()
         {
-            BreakAnim();
+            //BreakFarmAnim();
             toolObject.SetActive(true);
 
             var animTimeMultiply = _mineStrikePeriod > DefaultMineStrikeTime ? 1 : (_mineStrikePeriod / DefaultMineStrikeTime * 0.9f);
 
-            _animLTID =
-                LeanTween.value(visualTran.gameObject, 0, 1, DefaultMineStrikeTime * 0.8f * animTimeMultiply).setOnUpdate(
+            _animFarmLTID =
+                LeanTween.value(0, 1, DefaultMineStrikeTime * 0.8f * animTimeMultiply).setOnUpdate(
                     (value) =>
                     {
                         toolArmTran.localRotation = Quaternion.Euler(value * -90, 0, 0);
                         visualTran.localScale = new Vector3(1, 1 + value * 0.2f, 1);
                     }).setOnComplete(() =>
                 {
-                    _animLTID =
-                        LeanTween.value(visualTran.gameObject, 1, 0, DefaultMineStrikeTime * 0.2f * animTimeMultiply).setOnUpdate(
+                    _animFarmLTID =
+                        LeanTween.value(1, 0, DefaultMineStrikeTime * 0.2f * animTimeMultiply).setOnUpdate(
                             (value) =>
                             {
                                 toolArmTran.localRotation = Quaternion.Euler(value * -90, 0, 0);
@@ -237,16 +290,28 @@ namespace TheSTAR.World.Player
                 }).id;
         }
     
-        private void BreakAnim()
+        private void BreakFarmAnim()
         {
-            if (_animLTID == -1) return;
-            LeanTween.cancel(_animLTID);
+            if (_animFarmLTID == -1) return;
+            LeanTween.cancel(_animFarmLTID);
             visualTran.localScale = Vector3.one;
             toolObject.SetActive(false);
             toolArmTran.localRotation = Quaternion.Euler(0, 0, 0);
-            _animLTID = -1;
+            _animFarmLTID = -1;
         }
-    
+
+        private void BreakMoveAnim()
+        {
+            if (_animStepLTID == -1) return;
+            
+            LeanTween.cancel(_animStepLTID);
+            
+            legLeft.localRotation = Quaternion.Euler(0, 0, 0);
+            legRight.localRotation = Quaternion.Euler(0, 0, 0);
+            _animStepLTID = -1;
+            
+        }
+        
         #endregion
 
         #region Craft
