@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51c61267a784e44698b551158c5087c8, type: 3}
+  m_Name: SourcesConfig
+  m_EditorClassIdentifier: 
+  sourceDatas:
+  - _sourceType: 0
+    _dropItemType: 0
+    _miningData:
+      _miningPeriod: 1
+      _oneHitDropCount: 2
+      _maxHitsCount: 5
+      _recoveryTime:
+        seconds: 10
+        minutes: 0
+        hours: 0
+  - _sourceType: 1
+    _dropItemType: 6
+    _miningData:
+      _miningPeriod: 1
+      _oneHitDropCount: 1
+      _maxHitsCount: 10
+      _recoveryTime:
+        seconds: 20
+        minutes: 0
+        hours: 0
+  - _sourceType: 2
+    _dropItemType: 8
+    _miningData:
+      _miningPeriod: 1
+      _oneHitDropCount: 1
+      _maxHitsCount: 10
+      _recoveryTime:
+        seconds: 30
+        minutes: 0
+        hours: 0
+  - _sourceType: 3
+    _dropItemType: 2
+    _miningData:
+      _miningPeriod: 0.8
+      _oneHitDropCount: 2
+      _maxHitsCount: 6
+      _recoveryTime:
+        seconds: 15
+        minutes: 0
+        hours: 0
+  - _sourceType: 4
+    _dropItemType: 1
+    _miningData:
+      _miningPeriod: 1
+      _oneHitDropCount: 2
+      _maxHitsCount: 10
+      _recoveryTime:
+        seconds: 10
+        minutes: 0
+        hours: 0

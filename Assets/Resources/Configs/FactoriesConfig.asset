@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b41e228ddd2d471fa3574ac573e0efa, type: 3}
+  m_Name: FactoriesConfig
+  m_EditorClassIdentifier: 
+  factoryDatas:
+  - _factoryType: 0
+    _fromItemType: 0
+    neededFromItemCount: 10
+    _toItemType: 3
+    resultToItemCount: 2
+    craftTime: 1
+  - _factoryType: 1
+    _fromItemType: 1
+    neededFromItemCount: 10
+    _toItemType: 4
+    resultToItemCount: 1
+    craftTime: 1
+  - _factoryType: 2
+    _fromItemType: 2
+    neededFromItemCount: 10
+    _toItemType: 5
+    resultToItemCount: 1
+    craftTime: 1
+  - _factoryType: 3
+    _fromItemType: 6
+    neededFromItemCount: 20
+    _toItemType: 7
+    resultToItemCount: 1
+    craftTime: 1
+  - _factoryType: 4
+    _fromItemType: 8
+    neededFromItemCount: 100
+    _toItemType: 9
+    resultToItemCount: 1
+    craftTime: 1
+  dropToFactoryPeriod: 0.1
+  randomOffsetRange: 0.4
+  dropWaitAfterCreateTime: 0.1

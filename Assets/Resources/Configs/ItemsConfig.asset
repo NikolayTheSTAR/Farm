@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fa647862f30c4df8a805443354b3948, type: 3}
+  m_Name: ItemsConfig
+  m_EditorClassIdentifier: 
+  items:
+  - itemType: 0
+    physicalImpulse: 5
+    iconSprite: {fileID: 21300000, guid: 079c84ae540554bb7b78e9eb309fed09, type: 3}
+  - itemType: 1
+    physicalImpulse: 5
+    iconSprite: {fileID: 21300000, guid: d9187dcd9df0d459ab78a19b1f057628, type: 3}
+  - itemType: 2
+    physicalImpulse: 5
+    iconSprite: {fileID: 21300000, guid: 9a0586920560c4980956bd062f5092b1, type: 3}
+  - itemType: 3
+    physicalImpulse: 5
+    iconSprite: {fileID: 21300000, guid: 9edae40ab86e04245a849ff30a157345, type: 3}
+  - itemType: 4
+    physicalImpulse: 5
+    iconSprite: {fileID: 21300000, guid: 3f709739cb85f4374bde33bf7c85d3ec, type: 3}
+  - itemType: 5
+    physicalImpulse: 5
+    iconSprite: {fileID: 21300000, guid: 2d39bb4606ca241bb86ea4fc4efd8ae3, type: 3}
+  - itemType: 6
+    physicalImpulse: 5
+    iconSprite: {fileID: 21300000, guid: b9a8a0b1d07f64e478afb56c833ed116, type: 3}
+  - itemType: 7
+    physicalImpulse: 5
+    iconSprite: {fileID: 21300000, guid: 4a4ea2920b4ad45919edadcf013b2ea6, type: 3}
+  - itemType: 8
+    physicalImpulse: 5
+    iconSprite: {fileID: 21300000, guid: 97cf3fd80d15c49cb89224273169e325, type: 3}
+  - itemType: 9
+    physicalImpulse: 5
+    iconSprite: {fileID: 21300000, guid: f5b24a29029524456a2d1e317bd93019, type: 3}
