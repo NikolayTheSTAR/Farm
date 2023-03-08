@@ -20,7 +20,7 @@ namespace TheSTAR.GUI.Screens
         
         public void OnTransactionReact(ItemType itemType, int finalValue)
         {
-            var counter = counters.Find(info => info.ItemType == itemType);
+            var counter = GetCounter(itemType);
             if (counter == null) return;
             
             counter.SetValue(finalValue);   
@@ -39,5 +39,7 @@ namespace TheSTAR.GUI.Screens
                 counters.Add(counter);
             }
         }
+
+        public ItemCounter GetCounter(ItemType itemType) => counters.Find(info => info.ItemType == itemType);
     }
 }

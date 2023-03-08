@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using Configs;
 using TheSTAR.Data;
+using TheSTAR.GUI;
+using TheSTAR.GUI.FlyUI;
 using TheSTAR.Utility;
 using TheSTAR.World.Farm;
 using UnityEngine;
@@ -14,6 +16,7 @@ namespace TheSTAR
         private List<ITransactionReactable> _transactionReactables;
         private DataController _data;
         private FarmController _farm;
+        private FlyUIContainer _flyUI;
 
         private const string FactoriesConfigPath = "Configs/FactoriesConfig";
         private FactoriesConfig _factoriesConfig;
@@ -26,7 +29,7 @@ namespace TheSTAR
             }
         }
     
-        public void Init(DataController data, FarmController farm, List<ITransactionReactable> trs)
+        public void Init(DataController data, FarmController farm, FlyUIContainer flyUI, List<ITransactionReactable> trs)
         {
             _transactionReactables = trs;
             _data = data;
