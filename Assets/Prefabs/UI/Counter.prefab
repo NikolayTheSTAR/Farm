@@ -228,3 +228,4 @@ MonoBehaviour:
   itemType: 0
   iconImage: {fileID: 3229815501054170109}
   counterText: {fileID: 3229815499921719647}
+  smooth: 1

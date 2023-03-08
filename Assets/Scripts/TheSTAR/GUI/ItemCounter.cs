@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,10 +11,16 @@ namespace TheSTAR.GUI
         [SerializeField] private ItemType itemType;
         [SerializeField] private Image iconImage;
         [SerializeField] private TextMeshProUGUI counterText;
+        [SerializeField] private bool smooth = false;
 
-        private int _animLTID = 0;
-        private int _currentValue = 0;
+        private int 
+        _animScaleLTID = -1,
+        _smoothLTID = -1,
+        _tempSmoothValue = 0,
+        _currentValue = 0;
+        
         private int? maxValue = null;
+        private const float SmoothTime = 1;
         
         public ItemType ItemType => itemType;
         
@@ -24,27 +31,54 @@ namespace TheSTAR.GUI
             this.maxValue = maxValue;
         }
         
-        public void SetValue(int value)
+        public void SetValue(int toValue)
         {
-            counterText.text = maxValue == null ? value.ToString() : $"{value}/{maxValue}";
-
-            var needAnimate = value > _currentValue;
-            _currentValue = value;
-
-            if (!needAnimate) return;
-            
-            if (_animLTID != -1)
+            // smooth
+            if (smooth)
             {
-                LeanTween.cancel(_animLTID);
-                _animLTID = -1;
-            }
-                
-            _animLTID =
-                LeanTween.scale(counterText.gameObject, new Vector3(1.2f, 1.2f, 1), 0.1f).setOnComplete(() =>
+                if (Math.Abs(toValue - _currentValue) == 1) SetValueToText(toValue);
+                else
                 {
-                    _animLTID =
-                        LeanTween.scale(counterText.gameObject, Vector3.one, 0.2f).id;
-                }).id;
+                    if (_smoothLTID != -1)
+                    {
+                        LeanTween.cancel(_smoothLTID);
+                        _smoothLTID = -1;
+                    }
+                    
+                    _smoothLTID =
+                    LeanTween.value(_tempSmoothValue, toValue, SmoothTime).setOnUpdate((value) =>
+                    {
+                        _tempSmoothValue = (int)value;
+                        SetValueToText(_tempSmoothValue);
+                    }).id;
+                }
+            }
+            else SetValueToText(toValue);
+            
+            var needScaleAnimate = toValue > _currentValue;
+            _currentValue = toValue;
+            
+            // animate scale
+            if (needScaleAnimate)
+            {
+                if (_animScaleLTID != -1)
+                {
+                    LeanTween.cancel(_animScaleLTID);
+                    _animScaleLTID = -1;
+                }
+                
+                _animScaleLTID =
+                    LeanTween.scale(counterText.gameObject, new Vector3(1.2f, 1.2f, 1), 0.1f).setOnComplete(() =>
+                    {
+                        _animScaleLTID =
+                            LeanTween.scale(counterText.gameObject, Vector3.one, 0.2f).id;
+                    }).id;   
+            }
+
+            void SetValueToText(int value)
+            {
+                counterText.text = maxValue == null ? value.ToString() : $"{value}/{maxValue}";
+            }
         }
     }
 }

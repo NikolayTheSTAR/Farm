@@ -14,6 +14,8 @@ namespace World
         [SerializeField] private GameObject prolificVisual;
         [SerializeField] private GameObject emptyVisual;
 
+        public Transform startSendPos => transform;
+
         private int _animLTID = -1;
         private Action<IDropSender, ItemType> _dropItemAction;
         private Action<FarmSource> _onEmptying;

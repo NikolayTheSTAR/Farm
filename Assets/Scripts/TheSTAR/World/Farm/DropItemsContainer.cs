@@ -46,7 +46,7 @@ namespace Mining
         public void DropFromSenderToPlayer(IDropSender sender, ItemType dropItemType)
         {
             var offset = CreateItemPosOffset;
-            DropItemTo(dropItemType, sender.transform.position + offset, _playerDropReceiver, () =>
+            DropItemTo(dropItemType, sender.startSendPos.position + offset, _playerDropReceiver, () =>
             {   
                 _transactions.AddItem(dropItemType);
                 sender.OnCompleteDrop();
@@ -124,7 +124,7 @@ namespace Mining
 
     public interface IDropSender
     {
-        Transform transform { get; }
+        Transform startSendPos { get; }
         void OnCompleteDrop();
     }
 

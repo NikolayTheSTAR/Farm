@@ -13,8 +13,11 @@ namespace World
     public class Factory : GameWorldCiObject, IDropReceiver, IDropSender
     {
         [SerializeField] private FactoryType factoryType;
+        [SerializeField] private Transform startSendPoint;
 
-        public override bool CanInteract => !_isSending && (_itemsInStorageCount + _itemsOnWayCount) < _factoryData.NeededFromItemCount;
+        public Transform startSendPos => startSendPoint;
+
+        public override bool CanInteract => true; //!_isSending && (_itemsInStorageCount + _itemsOnWayCount) < _factoryData.NeededFromItemCount;
         public override CiCondition Condition => CiCondition.PlayerIsStopped;
         public FactoryType FactoryType => factoryType;
 

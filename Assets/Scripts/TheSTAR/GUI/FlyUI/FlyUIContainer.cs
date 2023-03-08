@@ -34,7 +34,7 @@ namespace TheSTAR.GUI.FlyUI
         
         private void StartFlyTo(IDropSender sender, RectTransform rect, ItemType itemType, int value)
         {
-            var currentFlyObject = GetFlyObjectFromPool(Camera.main.WorldToScreenPoint(sender.transform.position));
+            var currentFlyObject = GetFlyObjectFromPool(Camera.main.WorldToScreenPoint(sender.startSendPos.position));
             var startPos = currentFlyObject.transform.position;
             var distance = rect.position - startPos;
 
