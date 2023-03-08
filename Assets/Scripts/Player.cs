@@ -13,6 +13,8 @@ public class Player : GameWorldObject, ICameraFocusable, IJoystickControlled, ID
     [SerializeField] private NavMeshAgent meshAgent;
     [SerializeField] private EntranceTrigger trigger;
     [SerializeField] private Transform visualTran;
+    [SerializeField] private Transform toolArmTran;
+    [SerializeField] private GameObject toolObject;
 
     private float 
         _mineStrikePeriod = 1,
@@ -161,9 +163,9 @@ public class Player : GameWorldObject, ICameraFocusable, IJoystickControlled, ID
         }
     }
     
-    #region Mining
+    #region Farm
 
-    public void StartMining(FarmSource source)
+    public void StartFarm(FarmSource source)
     {
         if (_isMining) return;
         
@@ -175,10 +177,10 @@ public class Player : GameWorldObject, ICameraFocusable, IJoystickControlled, ID
         _isMining = true;
         
         if (_mineCoroutine != null) StopCoroutine(_mineCoroutine);
-        _mineCoroutine = StartCoroutine(MiningCor());
+        _mineCoroutine = StartCoroutine(FarmingCor());
     }
         
-    public void StopMining(FarmSource rs)
+    public void StopFarm(FarmSource rs)
     {
         if (_currentSource != rs) return;
             
@@ -191,27 +193,39 @@ public class Player : GameWorldObject, ICameraFocusable, IJoystickControlled, ID
         RetryInteract();
     }
 
-    private IEnumerator MiningCor()
+    private IEnumerator FarmingCor()
     {
         while (_isMining)
         {
-            DoMineStrike();
+            DoFarmStrike();
             yield return new WaitForSeconds(_mineStrikePeriod);
         }
         yield return null;
     }
 
-    private void DoMineStrike()
+    private void DoFarmStrike()
     {
         BreakAnim();
+        toolObject.SetActive(true);
 
         var animTimeMultiply = _mineStrikePeriod > DefaultMineStrikeTime ? 1 : (_mineStrikePeriod / DefaultMineStrikeTime * 0.9f);
-        
+
         _animLTID =
-            LeanTween.scaleY(visualTran.gameObject, 1.2f, DefaultMineStrikeTime * 0.8f * animTimeMultiply).setOnComplete(() =>
+            LeanTween.value(visualTran.gameObject, 0, 1, DefaultMineStrikeTime * 0.8f * animTimeMultiply).setOnUpdate(
+            (value) =>
+            {
+                toolArmTran.localRotation = Quaternion.Euler(value * -90, 0, 0);
+                visualTran.localScale = new Vector3(1, 1 + value * 0.2f, 1);
+            }).setOnComplete(() =>
             {
                 _animLTID =
-                    LeanTween.scaleY(visualTran.gameObject, 1f, DefaultMineStrikeTime * 0.2f * animTimeMultiply).setOnComplete(() => _currentSource.TakeHit()).id;
+                LeanTween.value(visualTran.gameObject, 1, 0, DefaultMineStrikeTime * 0.2f * animTimeMultiply).setOnUpdate(
+                (value) =>
+                {
+                    toolArmTran.localRotation = Quaternion.Euler(value * -90, 0, 0);
+                    visualTran.localScale = new Vector3(1, 1 + value * 0.2f, 1);
+                }).setOnComplete(() => _currentSource.TakeHit()).id;
+                
             }).id;
     }
     
@@ -220,6 +234,8 @@ public class Player : GameWorldObject, ICameraFocusable, IJoystickControlled, ID
         if (_animLTID == -1) return;
         LeanTween.cancel(_animLTID);
         visualTran.localScale = Vector3.one;
+        toolObject.SetActive(false);
+        toolArmTran.localRotation = Quaternion.Euler(0, 0, 0);
         _animLTID = -1;
     }
     

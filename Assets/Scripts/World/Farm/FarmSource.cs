@@ -96,12 +96,12 @@ namespace World
 
         public override void Interact(Player p)
         {
-            p.StartMining(this);
+            p.StartFarm(this);
         }
 
         public override void StopInteract(Player p)
         {
-            p.StopMining(this);
+            p.StopFarm(this);
         }
         
         public void OnCompleteDrop()

@@ -38,7 +38,7 @@ namespace World
                 sourceData = _farmController.SourcesConfig.SourceDatas[(int)sourceType];
                 source.Init(sourceData, dropItemsContainer.DropFromSenderToPlayer, (s) =>
                 {
-                    CurrentPlayer.StopMining(s);
+                    CurrentPlayer.StopFarm(s);
                     _farmController.StartSourceRecovery(s);
                 }, () => CurrentPlayer.RetryInteract());
             }
