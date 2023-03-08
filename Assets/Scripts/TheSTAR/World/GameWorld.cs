@@ -3,6 +3,7 @@ using System.Linq;
 using Configs;
 using Mining;
 using TheSTAR;
+using TheSTAR.GUI.FlyUI;
 using TheSTAR.World.Farm;
 using TheSTAR.World.Player;
 using UnityEngine;
@@ -21,12 +22,14 @@ namespace World
         private FarmController _farmController;
         private DropItemsContainer _dropItemsContainer;
         private TransactionsController _transactions;
+        private FlyUIContainer _flyUI;
 
-        public void Init(DropItemsContainer dropItemsContainer, FarmController farmController, TransactionsController transactions)
+        public void Init(DropItemsContainer dropItemsContainer, FarmController farmController, TransactionsController transactions, FlyUIContainer flyUI)
         {
             _farmController = farmController;
             _dropItemsContainer = dropItemsContainer;
             _transactions = transactions;
+            _flyUI = flyUI;
             
             if (CurrentPlayer != null) Destroy(CurrentPlayer);
             SpawnPlayer();
@@ -51,7 +54,7 @@ namespace World
                 if (factory == null) continue;
                 
                 factoryData = transactions.FactoriesConfig.FactoryDatas[(int)factory.FactoryType];
-                factory.Init(factoryData, dropItemsContainer.DropFromSenderToPlayer);
+                factory.Init(factoryData, _flyUI.FlyToCounter);
             }
         }
     

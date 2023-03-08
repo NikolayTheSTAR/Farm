@@ -26,8 +26,6 @@ namespace TheSTAR.GUI
         
         public void SetValue(int value)
         {
-            gameObject.SetActive(value > 0);
-            
             counterText.text = maxValue == null ? value.ToString() : $"{value}/{maxValue}";
 
             var needAnimate = value > _currentValue;

@@ -45,7 +45,7 @@ namespace TheSTAR
         private void Init()
         {
             farm.Init();
-            world.Init(drop, farm, transactions);
+            world.Init(drop, farm, transactions, flyUI);
             cameraController.FocusTo(world.CurrentPlayer);
         
             gui.Init(out var trs);
@@ -58,7 +58,7 @@ namespace TheSTAR
             transactions.Init(data, farm, flyUI, trs);
             drop.Init(transactions, farm, world.CurrentPlayer, world.CurrentPlayer.StopCraft);
         
-            flyUI.Init(gui);
+            flyUI.Init(gui, transactions);
         }
     }
 }

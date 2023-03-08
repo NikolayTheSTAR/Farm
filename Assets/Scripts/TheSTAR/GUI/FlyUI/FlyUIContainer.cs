@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Mining;
 using TheSTAR.GUI.Screens;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -12,33 +13,28 @@ namespace TheSTAR.GUI.FlyUI
         [SerializeField] private FlyUIObject flyObjectPrefab;
         [SerializeField] private AnimationCurve speedCurve;
         [SerializeField] private AnimationCurve scaleCurve;
-        [SerializeField] private GameWorldObject testFromObject;
 
         private const float FlyTime = 1;
         
         private GuiController _gui;
+        private TransactionsController _transactions;
 
         private List<FlyUIObject> _flyObjectsPool = new List<FlyUIObject>();
 
-        public void Init(GuiController gui)
+        public void Init(GuiController gui, TransactionsController transactions)
         {
             _gui = gui;
+            _transactions = transactions;
         }
-
-        [ContextMenu("TestFly")]
-        private void TestFly()
+        
+        public void FlyToCounter(IDropSender from, ItemType itemType, int value)
         {
-            FlyToCounter(testFromObject.transform, ItemType.Coin);
+            StartFlyTo(from, _gui.FindScreen<GameScreen>().GetCounter(itemType).GetComponent<RectTransform>(), itemType, value);
         }
-
-        private void FlyToCounter(Transform from, ItemType itemType, Action completeAction = null)
+        
+        private void StartFlyTo(IDropSender sender, RectTransform rect, ItemType itemType, int value)
         {
-            StartFlyTo(from, _gui.FindScreen<GameScreen>().GetCounter(itemType).GetComponent<RectTransform>(), completeAction);
-        }
-
-        private void StartFlyTo(Transform from, RectTransform rect, Action completeAction = null)
-        {
-            var currentFlyObject = GetFlyObjectFromPool(Camera.main.WorldToScreenPoint(from.position));
+            var currentFlyObject = GetFlyObjectFromPool(Camera.main.WorldToScreenPoint(sender.transform.position));
             var startPos = currentFlyObject.transform.position;
             var distance = rect.position - startPos;
 
@@ -50,7 +46,8 @@ namespace TheSTAR.GUI.FlyUI
             }) .setOnComplete(() =>
             {
                 currentFlyObject.gameObject.SetActive(false);
-                completeAction?.Invoke();
+                _transactions.AddItem(itemType, value);
+                sender.OnCompleteDrop();
             });
         }
 

@@ -25,9 +25,9 @@ namespace World
 
         public FactoryData FactoryData => _factoryData;
         
-        private Action<IDropSender, ItemType> _dropItemAction;
+        private Action<IDropSender, ItemType, int> _dropItemAction;
 
-        public void Init(FactoryData factoryData, Action<IDropSender, ItemType> dropItemAction)
+        public void Init(FactoryData factoryData, Action<IDropSender, ItemType, int> dropItemAction)
         {
             _factoryData = factoryData;
             _dropItemAction = dropItemAction;
@@ -55,8 +55,7 @@ namespace World
             
             LeanTween.value(0, 1, _factoryData.CraftTime).setOnComplete(() =>
             {
-                for (var i = 0; i < _factoryData.ResultToItemCount; i++) 
-                    _dropItemAction(this, _factoryData.ToItemType);
+                _dropItemAction(this, _factoryData.ToItemType, _factoryData.ResultToItemCount);
             });
         }
 

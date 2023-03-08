@@ -7052,7 +7052,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  testFromObject: {fileID: 1420837841}
 --- !u!1 &1914525922
 GameObject:
   m_ObjectHideFlags: 0
