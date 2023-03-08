@@ -18,10 +18,11 @@ namespace TheSTAR.World.Player
         [SerializeField] private EntranceTrigger trigger;
         [SerializeField] private Transform visualTran;
         [SerializeField] private Transform toolArmTran;
-        [SerializeField] private GameObject toolObject;
         [SerializeField] private PlayerBackpack backpack;
         [SerializeField] private Transform legLeft;
         [SerializeField] private Transform legRight;
+        [SerializeField] private Transform armLeft;
+        [SerializeField] private Transform armRight;
 
         private float 
         _mineStrikePeriod = 1,
@@ -55,6 +56,7 @@ namespace TheSTAR.World.Player
         private const float DefaultMineStrikeTime = 0.5f;
         private const float StepTime = 0.5f;
         private const float StepAngle = 30;
+        private const float BackpackStepAngle = 5;
         private const string CharacterConfigPath = "Configs/CharacterConfig";
     
         private CharacterConfig _characterConfig;
@@ -209,6 +211,10 @@ namespace TheSTAR.World.Player
 
                 legLeft.localRotation = Quaternion.Euler(angle, 0, 0);
                 legRight.localRotation = Quaternion.Euler(-angle, 0, 0);
+                armLeft.localRotation = Quaternion.Euler(-angle, 0, 0);
+                armRight.localRotation = Quaternion.Euler(angle, 0, 0);
+                backpack.transform.localRotation = Quaternion.Euler(0, 0, BackpackStepAngle * value);
+                
             }).setOnComplete(() =>
             {
                 _animStepLTID =
@@ -218,6 +224,9 @@ namespace TheSTAR.World.Player
 
                     legLeft.localRotation = Quaternion.Euler(angle, 0, 0);
                     legRight.localRotation = Quaternion.Euler(-angle, 0, 0);
+                    armLeft.localRotation = Quaternion.Euler(-angle, 0, 0);
+                    armRight.localRotation = Quaternion.Euler(angle, 0, 0);
+                    backpack.transform.localRotation = Quaternion.Euler(0, 0, BackpackStepAngle * value);
                 }).id;
             }).id;
         }
@@ -267,7 +276,8 @@ namespace TheSTAR.World.Player
         private void DoFarmStrike()
         {
             //BreakFarmAnim();
-            toolObject.SetActive(true);
+            toolArmTran.gameObject.SetActive(true);
+            armRight.gameObject.SetActive(false);
 
             var animTimeMultiply = _mineStrikePeriod > DefaultMineStrikeTime ? 1 : (_mineStrikePeriod / DefaultMineStrikeTime * 0.9f);
 
@@ -295,7 +305,8 @@ namespace TheSTAR.World.Player
             if (_animFarmLTID == -1) return;
             LeanTween.cancel(_animFarmLTID);
             visualTran.localScale = Vector3.one;
-            toolObject.SetActive(false);
+            toolArmTran.gameObject.SetActive(false);
+            armRight.gameObject.SetActive(true);
             toolArmTran.localRotation = Quaternion.Euler(0, 0, 0);
             _animFarmLTID = -1;
         }
@@ -308,6 +319,10 @@ namespace TheSTAR.World.Player
             
             legLeft.localRotation = Quaternion.Euler(0, 0, 0);
             legRight.localRotation = Quaternion.Euler(0, 0, 0);
+            armLeft.localRotation = Quaternion.Euler(0, 0, 0);
+            armRight.localRotation = Quaternion.Euler(0, 0, 0);
+            backpack.transform.localRotation = Quaternion.Euler(0, 0, 0);
+
             _animStepLTID = -1;
             
         }
